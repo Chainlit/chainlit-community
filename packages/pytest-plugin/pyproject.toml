@@ -1,20 +1,10 @@
 [project]
-name = "chainlit-s3"
+name = "chainlit-pytest-plugin"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "boto3>=1.34.73,<2",
-]
-
-[dependency-groups]
-dev = [
-    "chainlit-pytest-plugin",
-]
-
-[tool.uv.sources]
-chainlit-pytest-plugin = { workspace = true }
+dependencies = []
 
 [build-system]
 requires = ["hatchling"]

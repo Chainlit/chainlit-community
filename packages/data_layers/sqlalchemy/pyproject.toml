@@ -16,6 +16,16 @@ s3 = [
   "chainlit-s3",
 ]
 
+[dependency-groups]
+dev = [
+    "chainlit-pytest-plugin",
+]
+
 [tool.uv.sources]
 chainlit-azure = { workspace = true }
 chainlit-s3 = { workspace = true }
+chainlit-pytest-plugin = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
