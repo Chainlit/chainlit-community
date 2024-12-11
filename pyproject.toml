@@ -12,4 +12,9 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["packages/storage_clients/azure", "packages/storage_clients/s3", "packages/data_layers/dynamodb", "packages/data_layers/sqlalchemy"]
+members = ["packages/storage_clients/azure", "packages/storage_clients/s3", "packages/data_layers/dynamodb", "packages/data_layers/sqlalchemy", "packages/pytest-plugin"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
