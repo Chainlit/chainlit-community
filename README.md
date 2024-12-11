@@ -5,6 +5,10 @@ Welcome to the Chainlit Community repository! This project extends and enhances 
 [![Discord](https://dcbadge.vercel.app/api/server/ZThrUxbAYw?style=flat)](https://discord.gg/k73SQ3FyUh)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/chainlit_io.svg?style=social&label=Follow%20%40chainlit_io)](https://twitter.com/chainlit_io)
 
+## Getting started
+### Requirements
+* [uv](https://docs.astral.sh/uv/getting-started/installation/)
+
 ## 🌟 About This Project
 
 The Chainlit Community repository is a collaborative space for developers to contribute to the broader Chainlit ecosystem. While the [core Chainlit project](https://github.com/Chainlit/chainlit) focuses on essential features and integrations, this repository serves as a hub for community-maintained extensions, plugins, and integrations.
