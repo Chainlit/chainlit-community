@@ -7,7 +7,9 @@ authors = [
     { name = "Mathijs de Bruin", email = "mathijs@mathijsfietst.nl" }
 ]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "chainlit>=1.3.2",
+]
 
 [tool.uv.workspace]
 members = ["packages/storage_clients/azure", "packages/storage_clients/s3", "packages/data_layers/dynamodb", "packages/data_layers/sqlalchemy"]
