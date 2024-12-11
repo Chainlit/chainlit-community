@@ -6,8 +6,8 @@ members = [
     "chainlit-azure",
     "chainlit-community",
     "chainlit-dynamodb",
-    "chainlit-sqlalchemy-legacy",
-    "s3",
+    "chainlit-s3",
+    "chainlit-sqlalchemy",
 ]
 
 [[package]]
@@ -129,9 +129,28 @@ version = "0.1.0"
 source = { virtual = "packages/data_layers/dynamodb" }
 
 [[package]]
-name = "chainlit-sqlalchemy-legacy"
+name = "chainlit-s3"
 version = "0.1.0"
-source = { virtual = "packages/data_layers" }
+source = { virtual = "packages/storage_clients/s3" }
+
+[[package]]
+name = "chainlit-sqlalchemy"
+version = "0.1.0"
+source = { virtual = "packages/data_layers/sqlalchemy" }
+
+[package.optional-dependencies]
+azure = [
+    { name = "chainlit-azure" },
+]
+s3 = [
+    { name = "chainlit-s3" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "chainlit-azure", marker = "extra == 'azure'", virtual = "packages/storage_clients/azure" },
+    { name = "chainlit-s3", marker = "extra == 's3'", virtual = "packages/storage_clients/s3" },
+]
 
 [[package]]
 name = "charset-normalizer"
@@ -792,11 +811,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/63/70/2bf7780ad2d390a8d
 wheels = [
     { url = "https://files.pythonhosted.org/packages/f9/9b/335f9764261e915ed497fcdeb11df5dfd6f7bf257d4a6a2a686d80da4d54/requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6", size = 64928 },
 ]
-
-[[package]]
-name = "s3"
-version = "0.1.0"
-source = { virtual = "packages/storage_clients/s3" }
 
 [[package]]
 name = "simple-websocket"

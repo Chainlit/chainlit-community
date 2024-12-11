@@ -1,5 +1,5 @@
 [project]
-name = "s3"
+name = "chainlit-s3"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
