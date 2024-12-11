@@ -8,3 +8,6 @@ authors = [
 ]
 requires-python = ">=3.10"
 dependencies = []
+
+[tool.uv.workspace]
+members = ["packages/storage_clients/azure", "packages/storage_clients/s3", "packages/data_layers/dynamodb", "packages/data_layers/sqlalchemy"]
