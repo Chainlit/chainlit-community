@@ -1,0 +1,22 @@
+[project]
+name = "chainlit-azure"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "azure-storage-file-datalake>=12.14.0,<13",
+]
+
+[tool.uv.sources]
+pytest-chainlit = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "azure-identity>=1.14.1,<2",
+    "pytest-chainlit",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

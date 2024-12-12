@@ -1,0 +1,33 @@
+[project]
+name = "chainlit-sqlalchemy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.11.10",
+    "sqlalchemy[asyncio]>=2.0.28,<3",
+]
+
+[project.optional-dependencies]
+azure = [
+  "chainlit-azure",
+]
+s3 = [
+  "chainlit-s3",
+]
+
+[dependency-groups]
+dev = [
+    "aiosqlite>=0.20.0",
+    "pytest-chainlit",
+]
+
+[tool.uv.sources]
+chainlit-azure = { workspace = true }
+chainlit-s3 = { workspace = true }
+pytest-chainlit = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
