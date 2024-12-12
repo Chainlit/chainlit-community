@@ -19,6 +19,7 @@ s3 = [
 
 [dependency-groups]
 dev = [
+    "aiosqlite>=0.20.0",
     "pytest-chainlit",
 ]
 
