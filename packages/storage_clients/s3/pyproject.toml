@@ -12,6 +12,7 @@ dependencies = [
 dev = [
     "moto>=5.0.22",
     "pytest-chainlit",
+    "types-boto3-dynamodb>=1.35.74",
 ]
 
 [tool.uv.sources]
