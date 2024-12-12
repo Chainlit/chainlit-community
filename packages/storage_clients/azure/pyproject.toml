@@ -9,12 +9,12 @@ dependencies = [
 ]
 
 [tool.uv.sources]
-chainlit-pytest-plugin = { workspace = true }
+pytest-chainlit = { workspace = true }
 
 [dependency-groups]
 dev = [
     "azure-identity>=1.14.1,<2",
-    "chainlit-pytest-plugin",
+    "pytest-chainlit",
 ]
 
 [build-system]

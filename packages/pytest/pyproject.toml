@@ -1,10 +1,15 @@
 [project]
-name = "chainlit-pytest-plugin"
+name = "pytest-chainlit"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "pytest>=8.3.4",
+]
+
+[project.entry-points.pytest11]
+chainlit = "chainlit_pytest.plugin"
 
 [build-system]
 requires = ["hatchling"]

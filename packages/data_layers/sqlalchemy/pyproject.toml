@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "aiohttp>=3.11.10",
     "sqlalchemy>=2.0.28,<3",
 ]
 
@@ -18,13 +19,13 @@ s3 = [
 
 [dependency-groups]
 dev = [
-    "chainlit-pytest-plugin",
+    "pytest-chainlit",
 ]
 
 [tool.uv.sources]
 chainlit-azure = { workspace = true }
 chainlit-s3 = { workspace = true }
-chainlit-pytest-plugin = { workspace = true }
+pytest-chainlit = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]

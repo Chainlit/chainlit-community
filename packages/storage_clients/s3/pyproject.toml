@@ -10,11 +10,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "chainlit-pytest-plugin",
+    "pytest-chainlit",
 ]
 
 [tool.uv.sources]
-chainlit-pytest-plugin = { workspace = true }
+pytest-chainlit = { workspace = true }
 
 [build-system]
 requires = ["hatchling"]
