@@ -37,11 +37,11 @@ def chainlit_test_user() -> User:
 
 @pytest.fixture
 def chainlit_mock_session_factory(
-    persisted_test_user: PersistedUser,
+    chainlit_persisted_test_user: PersistedUser,
 ) -> Callable[..., Mock]:
     def create_mock_session(**kwargs) -> Mock:
         mock = Mock(spec=WebsocketSession)
-        mock.user = kwargs.get("user", persisted_test_user)
+        mock.user = kwargs.get("user", chainlit_persisted_test_user)
         mock.id = kwargs.get("id", "test_session_id")
         mock.user_env = kwargs.get("user_env", {"test_env": "value"})
         mock.chat_settings = kwargs.get("chat_settings", {})
@@ -60,13 +60,13 @@ def chainlit_mock_session_factory(
 
 
 @pytest.fixture
-def mock_session(mock_session_factory) -> Mock:
-    return mock_session_factory()
+def chainlit_mock_session(chainlit_mock_session_factory) -> Mock:
+    return chainlit_mock_session_factory()
 
 
 @asynccontextmanager
-async def _create_chainlit_context(mock_session):
-    context = ChainlitContext(mock_session)
+async def _create_chainlit_context(chainlit_mock_session):
+    context = ChainlitContext(chainlit_mock_session)
     token = context_var.set(context)
     try:
         yield context
