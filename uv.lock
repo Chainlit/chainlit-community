@@ -405,6 +405,7 @@ dependencies = [
 dev = [
     { name = "pyright" },
     { name = "pytest" },
+    { name = "pytest-asyncio" },
     { name = "ruff" },
 ]
 
@@ -415,6 +416,7 @@ requires-dist = [{ name = "chainlit", specifier = ">=1.3.2" }]
 dev = [
     { name = "pyright", specifier = ">=1.1.390" },
     { name = "pytest", specifier = ">=8.3.4" },
+    { name = "pytest-asyncio", specifier = ">=0.24.0" },
     { name = "ruff", specifier = ">=0.8.3" },
 ]
 
@@ -1526,15 +1528,21 @@ wheels = [
 ]
 
 [[package]]
-name = "pytest-chainlit"
-version = "0.1.0"
-source = { editable = "packages/pytest" }
+name = "pytest-asyncio"
+version = "0.24.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
 ]
+sdist = { url = "https://files.pythonhosted.org/packages/52/6d/c6cf50ce320cf8611df7a1254d86233b3df7cc07f9b5f5cbcb82e08aa534/pytest_asyncio-0.24.0.tar.gz", hash = "sha256:d081d828e576d85f875399194281e92bf8a68d60d72d1a2faf2feddb6c46b276", size = 49855 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/96/31/6607dab48616902f76885dfcf62c08d929796fc3b2d2318faf9fd54dbed9/pytest_asyncio-0.24.0-py3-none-any.whl", hash = "sha256:a811296ed596b69bf0b6f3dc40f83bcaf341b155a269052d82efa2b25ac7037b", size = 18024 },
+]
 
-[package.metadata]
-requires-dist = [{ name = "pytest", specifier = ">=8.3.4" }]
+[[package]]
+name = "pytest-chainlit"
+version = "0.1.0"
+source = { editable = "packages/pytest" }
 
 [[package]]
 name = "python-dateutil"

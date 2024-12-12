@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 
 @pytest.fixture
-async def data_layer(mock_storage_client: BaseStorageClient, tmp_path: Path):
+async def data_layer(chainlit_mock_storage_client: BaseStorageClient, tmp_path: Path):
     db_file = tmp_path / "test_db.sqlite"
     conninfo = f"sqlite+aiosqlite:///{db_file}"
 
@@ -117,15 +117,17 @@ async def data_layer(mock_storage_client: BaseStorageClient, tmp_path: Path):
         )
 
     # Create SQLAlchemyDataLayer instance
-    data_layer = SQLAlchemyDataLayer(conninfo, storage_provider=mock_storage_client)
+    data_layer = SQLAlchemyDataLayer(
+        conninfo, storage_provider=chainlit_mock_storage_client
+    )
 
     return data_layer
 
 
 async def test_create_and_get_element(
-    mock_chainlit_context, data_layer: SQLAlchemyDataLayer
+    chainlit_mock_context, data_layer: SQLAlchemyDataLayer
 ):
-    async with mock_chainlit_context:
+    async with chainlit_mock_context:
         text_element = Text(
             id=str(uuid.uuid4()),
             name="test.txt",
@@ -152,8 +154,8 @@ async def test_get_current_timestamp(data_layer: SQLAlchemyDataLayer):
     assert isinstance(timestamp, str)
 
 
-async def test_get_user(test_user: User, data_layer: SQLAlchemyDataLayer):
-    persisted_user = await data_layer.create_user(test_user)
+async def test_get_user(chainlit_test_user: User, data_layer: SQLAlchemyDataLayer):
+    persisted_user = await data_layer.create_user(chainlit_test_user)
     assert persisted_user
 
     fetched_user = await data_layer.get_user(persisted_user.identifier)
@@ -166,11 +168,11 @@ async def test_get_user(test_user: User, data_layer: SQLAlchemyDataLayer):
     assert nonexistent_user is None
 
 
-async def test_create_user(test_user: User, data_layer: SQLAlchemyDataLayer):
-    persisted_user = await data_layer.create_user(test_user)
+async def test_create_user(chainlit_test_user: User, data_layer: SQLAlchemyDataLayer):
+    persisted_user = await data_layer.create_user(chainlit_test_user)
 
     assert persisted_user
-    assert persisted_user.identifier == test_user.identifier
+    assert persisted_user.identifier == chainlit_test_user.identifier
     assert persisted_user.createdAt
     assert persisted_user.id
 
@@ -178,15 +180,17 @@ async def test_create_user(test_user: User, data_layer: SQLAlchemyDataLayer):
     assert uuid.UUID(persisted_user.id)
 
 
-async def test_update_thread(test_user: User, data_layer: SQLAlchemyDataLayer):
-    persisted_user = await data_layer.create_user(test_user)
+async def test_update_thread(chainlit_test_user: User, data_layer: SQLAlchemyDataLayer):
+    persisted_user = await data_layer.create_user(chainlit_test_user)
     assert persisted_user
 
     await data_layer.update_thread("test_thread")
 
 
-async def test_get_thread_author(test_user: User, data_layer: SQLAlchemyDataLayer):
-    persisted_user = await data_layer.create_user(test_user)
+async def test_get_thread_author(
+    chainlit_test_user: User, data_layer: SQLAlchemyDataLayer
+):
+    persisted_user = await data_layer.create_user(chainlit_test_user)
     assert persisted_user
 
     await data_layer.update_thread("test_thread", user_id=persisted_user.id)
@@ -195,8 +199,8 @@ async def test_get_thread_author(test_user: User, data_layer: SQLAlchemyDataLaye
     assert author == persisted_user.identifier
 
 
-async def test_get_thread(test_user: User, data_layer: SQLAlchemyDataLayer):
-    persisted_user = await data_layer.create_user(test_user)
+async def test_get_thread(chainlit_test_user: User, data_layer: SQLAlchemyDataLayer):
+    persisted_user = await data_layer.create_user(chainlit_test_user)
     assert persisted_user
 
     await data_layer.update_thread("test_thread")
@@ -207,11 +211,11 @@ async def test_get_thread(test_user: User, data_layer: SQLAlchemyDataLayer):
     assert result is None
 
 
-async def test_delete_thread(test_user: User, data_layer: SQLAlchemyDataLayer):
-    persisted_user = await data_layer.create_user(test_user)
+async def test_delete_thread(chainlit_test_user: User, data_layer: SQLAlchemyDataLayer):
+    persisted_user = await data_layer.create_user(chainlit_test_user)
     assert persisted_user
 
-    await data_layer.update_thread("test_thread", "test_user")
+    await data_layer.update_thread("test_thread", "chainlit_test_user")
     await data_layer.delete_thread("test_thread")
     thread = await data_layer.get_thread("test_thread")
     assert thread is None
