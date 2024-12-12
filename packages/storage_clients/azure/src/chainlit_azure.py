@@ -6,7 +6,6 @@ from azure.storage.filedatalake import (
     DataLakeServiceClient,
     FileSystemClient,
 )
-
 from chainlit.data.storage_clients.base import BaseStorageClient
 from chainlit.logger import logger
 
