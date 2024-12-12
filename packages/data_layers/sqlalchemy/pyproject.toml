@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "aiohttp>=3.11.10",
-    "sqlalchemy>=2.0.28,<3",
+    "sqlalchemy[asyncio]>=2.0.28,<3",
 ]
 
 [project.optional-dependencies]
