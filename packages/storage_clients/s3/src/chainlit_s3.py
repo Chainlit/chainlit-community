@@ -1,4 +1,4 @@
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
 import boto3  # type: ignore
 from chainlit.data.storage_clients.base import BaseStorageClient
@@ -21,7 +21,7 @@ class S3StorageClient(BaseStorageClient):
     async def upload_file(
         self,
         object_key: str,
-        data: Union[bytes, str],
+        data: bytes | str,
         mime: str = "application/octet-stream",
         overwrite: bool = True,
     ) -> Dict[str, Any]:

@@ -5,7 +5,7 @@ import os
 import random
 from dataclasses import asdict
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import aiofiles
 import aiohttp
@@ -42,7 +42,7 @@ class DynamoDBDataLayer(BaseDataLayer):
         self,
         table_name: str,
         client: Optional["DynamoDBClient"] = None,
-        storage_provider: Optional[BaseStorageClient] = None,
+        storage_provider: BaseStorageClient | None = None,
         user_thread_limit: int = 10,
     ):
         if client:
@@ -216,7 +216,7 @@ class DynamoDBDataLayer(BaseDataLayer):
             )
             return
 
-        content: Optional[Union[bytes, str]] = None
+        content: bytes | str | None = None
 
         if element.content:
             content = element.content
@@ -297,7 +297,7 @@ class DynamoDBDataLayer(BaseDataLayer):
         return self._deserialize_item(response["Item"])  # type: ignore
 
     @queue_until_user_message()
-    async def delete_element(self, element_id: str, thread_id: Optional[str] = None):
+    async def delete_element(self, element_id: str, thread_id: str | None = None):
         thread_id = self.context.session.thread_id
         _logger.info(
             "DynamoDB: delete_element thread=%s element=%s", thread_id, element_id
@@ -484,7 +484,7 @@ class DynamoDBDataLayer(BaseDataLayer):
 
         return paginated_response
 
-    async def get_thread(self, thread_id: str) -> "Optional[ThreadDict]":
+    async def get_thread(self, thread_id: str) -> "ThreadDict | None":
         _logger.info("DynamoDB: get_thread thread=%s", thread_id)
 
         # Get all thread records
@@ -511,7 +511,7 @@ class DynamoDBDataLayer(BaseDataLayer):
             return None
 
         # process accordingly
-        thread_dict: Optional[ThreadDict] = None
+        thread_dict: ThreadDict | None = None
         steps = []
         elements = []
 
@@ -547,10 +547,10 @@ class DynamoDBDataLayer(BaseDataLayer):
     async def update_thread(
         self,
         thread_id: str,
-        name: Optional[str] = None,
-        user_id: Optional[str] = None,
-        metadata: Optional[Dict] = None,
-        tags: Optional[List[str]] = None,
+        name: str | None = None,
+        user_id: str | None = None,
+        metadata: Dict | None = None,
+        tags: List[str] | None = None,
     ):
         _logger.info("DynamoDB: update_thread thread=%s userId=%s", thread_id, user_id)
         _logger.debug(

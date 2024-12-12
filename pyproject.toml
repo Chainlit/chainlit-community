@@ -16,6 +16,7 @@ members = ["packages/storage_clients/azure", "packages/storage_clients/s3", "pac
 
 [dependency-groups]
 dev = [
+    "pyright>=1.1.390",
     "pytest>=8.3.4",
     "ruff>=0.8.3",
 ]
@@ -23,9 +24,6 @@ dev = [
 [tool.pytest.ini_options]
 # testpaths = ["tests"]
 asyncio_mode = "auto"
-
-[tool.ruff]
-target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "LOG", "UP", "T10", "ISC", "ICN", "LOG", "G", "PIE", "PT", "Q", "RSE", "FURB", "RUF"]

@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Union
 
 from azure.storage.filedatalake import (
     ContentSettings,
@@ -31,16 +31,8 @@ class AzureStorageClient(BaseStorageClient):
         self,
         account_url: str,
         container: str,
-        credential: Optional[
-            Union[
-                str,
-                Dict[str, str],
-                "AzureNamedKeyCredential",
-                "AzureSasCredential",
-                "TokenCredential",
-            ]
-        ],
-        sas_token: Optional[str] = None,
+        credential: Union[str, Dict[str, str], "AzureNamedKeyCredential", "AzureSasCredential", "TokenCredential"] | None,
+        sas_token: str | None = None,
     ):
         try:
             self.data_lake_client = DataLakeServiceClient(
@@ -57,7 +49,7 @@ class AzureStorageClient(BaseStorageClient):
     async def upload_file(
         self,
         object_key: str,
-        data: Union[bytes, str],
+        data: bytes | str,
         mime: str = "application/octet-stream",
         overwrite: bool = True,
     ) -> Dict[str, Any]:
