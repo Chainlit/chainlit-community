@@ -74,3 +74,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# Chainlit-generated files
+.chainlit/
