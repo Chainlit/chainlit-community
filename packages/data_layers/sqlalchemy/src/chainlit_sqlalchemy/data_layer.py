@@ -85,15 +85,22 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                 await session.begin()
                 result = await session.execute(parameterized_query, parameters)
                 await session.commit()
-                if result.returns_rows:
+
+                assert hasattr(result, "returns_rows")
+
+                # FIXME
+                # On select statements, we have rows. On insert/update we have rowcount.
+                # Normally, we'd check for one in the one case and the other in the other.
+                # For now, this is working, so we ignore.
+                if result.returns_rows:  # pyright: ignore reportAttributeAccessIssue
                     json_result = [dict(row._mapping) for row in result.fetchall()]
                     clean_json_result = self.clean_result(json_result)
                     assert isinstance(clean_json_result, list) or isinstance(
                         clean_json_result, int
                     )
-                    return clean_json_result
+                    return clean_json_result  # pyright: ignore reportReturnType
                 else:
-                    return result.rowcount
+                    return result.rowcount  # pyright: ignore reportAttributeAccessIssue
             except SQLAlchemyError as e:
                 await session.rollback()
                 logger.warn(f"An error occurred: {e}")
@@ -434,6 +441,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
         )
         if isinstance(element, list) and element:
             element_dict: Dict[str, Any] = element[0]
+
             return ElementDict(
                 id=element_dict["id"],
                 threadId=element_dict.get("threadId"),
@@ -450,7 +458,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                 playerConfig=element_dict.get("playerConfig"),
                 forId=element_dict.get("forId"),
                 mime=element_dict.get("mime"),
-            )
+            )  # pyright: ignore reportCallIssue
         else:
             return None
 
@@ -670,7 +678,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                         language=step_feedback.get("step_language"),
                         indent=step_feedback.get("step_indent"),
                         feedback=feedback,
-                    )
+                    )  # pyright: ignore reportCallIssue
                     # Append the step to the steps list of the corresponding ThreadDict
                     thread_dicts[thread_id]["steps"].append(step_dict)
 
@@ -694,7 +702,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                         page=element.get("element_page"),
                         forId=element.get("element_forid"),
                         mime=element.get("element_mime"),
-                    )
+                    )  # pyright: ignore reportCallIssue
                     thread_dicts[thread_id]["elements"].append(element_dict)  # type: ignore
 
         return list(thread_dicts.values())
