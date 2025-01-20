@@ -43,6 +43,18 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install project, validate lockfile
         run: uv sync --locked --all-packages --all-extras --dev
 
@@ -92,6 +104,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
 
       - name: Install the project
         run: uv sync --locked --all-packages --all-extras --dev
