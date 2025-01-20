@@ -102,9 +102,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Set Chainlit version
-        run: uv add ${{ matrix.chainlit-version }}
-
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
@@ -124,6 +121,9 @@ jobs:
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('uv.lock') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-store-
+
+      - name: Set Chainlit version
+        run: uv add --no-sync ${{ matrix.chainlit-version }}
 
       - name: Install the project
         run: uv sync --locked --all-packages --all-extras --dev
