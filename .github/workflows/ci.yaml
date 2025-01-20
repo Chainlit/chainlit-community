@@ -64,7 +64,9 @@ jobs:
         run: uv run --all-packages ruff check --output-format=github
 
       - name: Pyright
-        run: uv run --all-packages pyright
+        uses: jakebailey/pyright-action@v2
+        with:
+          venv-path: .venv
 
   test:
     name: "test"
