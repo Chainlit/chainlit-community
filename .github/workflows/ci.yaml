@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  UV_VERSION: "0.5.21"
+  PNPM_VERSION: "9.7.0"
+  NODE_VERSION: "22.7.0"
+
+jobs:
+  lint:
+    name: "lint"
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      # The official GitHub setup-python action can be faster, because GitHub caches the Python
+      # versions alongside the runner.
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".python-version"
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install project, validate lockfile
+        run: uv sync --locked --all-packages --all-extras --dev
+
+      - name: Ruff format
+        run: uv run ruff format --check
+
+      - name: Ruff check
+        run: uv run --all-packages ruff check --output-format=github
+
+      - name: Enable venv
+        run: echo "$PWD/.venv/bin" >> $GITHUB_PATH
+
+      - name: Pyright
+        uses: jakebailey/pyright-action@v2
+        with:
+          version: PATH
+
+  test:
+    name: "test"
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        chainlit-version:
+          - "chainlit==2.0.4"
+          - "git+https://github.com/Chainlit/chainlit.git#subdirectory=backend/"
+
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set Chainlit version
+        run: uv add ${{ matrix.chainlit-version }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install the project
+        run: uv sync --locked --all-packages --all-extras --dev
+
+      - name: Run tests
+        run: uv run --all-packages pytest
