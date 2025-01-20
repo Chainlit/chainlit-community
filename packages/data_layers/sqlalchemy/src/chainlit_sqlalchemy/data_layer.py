@@ -25,8 +25,12 @@ from chainlit.types import (
 from chainlit.user import PersistedUser, User
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 if TYPE_CHECKING:
     from chainlit.element import Element, ElementDict
@@ -55,7 +59,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
         self.engine: AsyncEngine = create_async_engine(
             self._conninfo, connect_args=ssl_args
         )
-        self.async_session = sessionmaker(
+        self.async_session = async_sessionmaker(
             bind=self.engine, expire_on_commit=False, class_=AsyncSession
         )  # type: ignore
         if storage_provider:
