@@ -63,10 +63,13 @@ jobs:
       - name: Ruff check
         run: uv run --all-packages ruff check --output-format=github
 
+      - name: Enable venv
+        run: echo "$PWD/.venv/bin" >> $GITHUB_PATH
+
       - name: Pyright
         uses: jakebailey/pyright-action@v2
         with:
-          venv-path: .venv
+          version: PATH
 
   test:
     name: "test"
