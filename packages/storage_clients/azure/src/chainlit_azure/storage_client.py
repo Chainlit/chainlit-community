@@ -31,14 +31,7 @@ class AzureStorageClient(BaseStorageClient):
         self,
         account_url: str,
         container: str,
-        credential: Union[
-            str,
-            Dict[str, str],
-            "AzureNamedKeyCredential",
-            "AzureSasCredential",
-            "TokenCredential",
-        ]
-        | None,
+        credential: Union[str, Dict[str, str], "AzureNamedKeyCredential", "AzureSasCredential", "TokenCredential"] | None,
         sas_token: str | None = None,
     ):
         try:
