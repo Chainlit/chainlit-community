@@ -1,12 +1,14 @@
+import datetime
 from typing import TYPE_CHECKING, Any, Dict, Union
 
+from azure.storage.blob import BlobSasPermissions, generate_blob_sas
 from azure.storage.filedatalake import (
     ContentSettings,
     DataLakeFileClient,
     DataLakeServiceClient,
     FileSystemClient,
 )
-from chainlit.data.storage_clients.base import BaseStorageClient
+from chainlit.data.storage_clients.base import EXPIRY_TIME, BaseStorageClient
 from chainlit.logger import logger
 
 if TYPE_CHECKING:
@@ -37,11 +39,13 @@ class AzureStorageClient(BaseStorageClient):
             "AzureNamedKeyCredential",
             "AzureSasCredential",
             "TokenCredential",
-        ]
-        | None,
+            None,
+        ],
         sas_token: str | None = None,
     ):
         try:
+            self.account_url = account_url
+            self.credential = credential
             self.data_lake_client = DataLakeServiceClient(
                 account_url=account_url, credential=credential
             )
@@ -51,7 +55,8 @@ class AzureStorageClient(BaseStorageClient):
             self.sas_token = sas_token
             logger.info("AzureStorageClient initialized")
         except Exception as e:
-            logger.warn(f"AzureStorageClient initialization error: {e}")
+            logger.warning(f"AzureStorageClient initialization error: {e}")
+            raise  # Re-raise the exception so the error is clear
 
     async def upload_file(
         self,
@@ -75,5 +80,62 @@ class AzureStorageClient(BaseStorageClient):
             )
             return {"object_key": object_key, "url": url}
         except Exception as e:
-            logger.warn(f"AzureStorageClient, upload_file error: {e}")
+            logger.warning(f"AzureStorageClient, upload_file error: {e}")
             return {}
+
+    async def delete_file(self, object_key: str) -> bool:
+        """
+        Delete a file from Azure Data Lake storage.
+
+        Args:
+            object_key: The key of the file to delete
+
+        Returns:
+            bool: True if file was deleted successfully, False otherwise
+        """
+        try:
+            file_client = self.container_client.get_file_client(object_key)
+            file_client.delete_file()
+            return True
+        except Exception as e:
+            logger.warning(f"AzureStorageClient, delete_file error: {e}")
+            return False
+
+    async def get_read_url(self, object_key: str) -> str:
+        """
+        Get a presigned URL for reading a file from Azure Data Lake storage.
+
+        Args:
+            object_key: The key of the file to get the URL for
+
+        Returns:
+            str: Presigned URL that can be used to read the file
+        """
+        try:
+            file_client = self.container_client.get_file_client(object_key)
+            base_url = file_client.url
+
+            if self.sas_token:
+                return f"{base_url}?{self.sas_token}"
+
+            # Only generate SAS token if we don't have one
+            account_name = self.account_url.split(".")[0].split("://")[-1]
+            account_key = self.credential if isinstance(self.credential, str) else None
+
+            if not account_key:
+                raise ValueError("Account key not found for SAS token generation")
+
+            sas_token = generate_blob_sas(
+                account_name=account_name,
+                account_key=account_key,
+                container_name=self.container_client.file_system_name,
+                blob_name=object_key,
+                permission=BlobSasPermissions(read=True),
+                expiry=datetime.datetime.utcnow()
+                + datetime.timedelta(seconds=EXPIRY_TIME),
+            )
+
+            return f"{base_url}?{sas_token}"
+        except Exception as e:
+            logger.warning(f"AzureStorageClient, get_read_url error: {e}")
+            return object_key
