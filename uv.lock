@@ -7,6 +7,7 @@ members = [
     "chainlit-community",
     "chainlit-dynamodb",
     "chainlit-literalai",
+    "chainlit-postgres",
     "chainlit-s3",
     "chainlit-sqlalchemy",
     "pytest-chainlit",
@@ -474,6 +475,21 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [{ name = "literalai", specifier = "==0.1.103" }]
+
+[[package]]
+name = "chainlit-postgres"
+version = "0.1.0"
+source = { editable = "packages/data_layers/postgres" }
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest-chainlit" },
+]
+
+[package.metadata]
+
+[package.metadata.requires-dev]
+dev = [{ name = "pytest-chainlit", editable = "packages/pytest" }]
 
 [[package]]
 name = "chainlit-s3"
