@@ -1,3 +1,3 @@
-from .data_layer import SQLAlchemyDataLayer
+from .data_layer import PostgresDataLayer
 
-__all__ = ["SQLAlchemyDataLayer"]
+__all__ = ["PostgresDataLayer"]
