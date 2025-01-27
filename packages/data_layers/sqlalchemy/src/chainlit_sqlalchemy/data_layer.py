@@ -272,6 +272,14 @@ class SQLAlchemyDataLayer(BaseDataLayer):
     async def delete_thread(self, thread_id: str):
         if self.show_logger:
             logger.info(f"SQLAlchemy: delete_thread, thread_id={thread_id}")
+
+        elements_query = """SELECT * FROM elements WHERE "threadId" = :id"""
+        elements = await self.execute_sql(elements_query, {"id": thread_id})
+
+        if self.storage_provider is not None and isinstance(elements, list):
+            for elem in filter(lambda x: x["objectKey"], elements):
+                await self.storage_provider.delete_file(object_key=elem["objectKey"])
+
         # Delete feedbacks/elements/steps/thread
         feedbacks_query = """DELETE FROM feedbacks WHERE "forId" IN (SELECT "id" FROM steps WHERE "threadId" = :id)"""
         elements_query = """DELETE FROM elements WHERE "threadId" = :id"""
@@ -441,7 +449,6 @@ class SQLAlchemyDataLayer(BaseDataLayer):
         )
         if isinstance(element, list) and element:
             element_dict: Dict[str, Any] = element[0]
-
             return ElementDict(
                 id=element_dict["id"],
                 threadId=element_dict.get("threadId"),
@@ -450,6 +457,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                 url=element_dict.get("url"),
                 objectKey=element_dict.get("objectKey"),
                 name=element_dict["name"],
+                props=json.loads(element_dict.get("props", "{}")),
                 display=element_dict["display"],
                 size=element_dict.get("size"),
                 language=element_dict.get("language"),
@@ -458,7 +466,7 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                 playerConfig=element_dict.get("playerConfig"),
                 forId=element_dict.get("forId"),
                 mime=element_dict.get("mime"),
-            )  # pyright: ignore reportCallIssue
+            )
         else:
             return None
 
@@ -514,7 +522,10 @@ class SQLAlchemyDataLayer(BaseDataLayer):
 
         element_dict["url"] = uploaded_file.get("url")
         element_dict["objectKey"] = uploaded_file.get("object_key")
+
         element_dict_cleaned = {k: v for k, v in element_dict.items() if v is not None}
+        if "props" in element_dict_cleaned:
+            element_dict_cleaned["props"] = json.dumps(element_dict_cleaned["props"])
 
         columns = ", ".join(f'"{column}"' for column in element_dict_cleaned.keys())
         placeholders = ", ".join(f":{column}" for column in element_dict_cleaned.keys())
@@ -525,8 +536,21 @@ class SQLAlchemyDataLayer(BaseDataLayer):
     async def delete_element(self, element_id: str, thread_id: str | None = None):
         if self.show_logger:
             logger.info(f"SQLAlchemy: delete_element, element_id={element_id}")
+
+        query = """SELECT * FROM elements WHERE "id" = :id"""
+        elements = await self.execute_sql(query, {"id": element_id})
+
+        if (
+            self.storage_provider is not None
+            and isinstance(elements, list)
+            and len(elements) > 0
+            and elements[0]["objectKey"]
+        ):
+            await self.storage_provider.delete_file(object_key=elements[0]["objectKey"])
+
         query = """DELETE FROM elements WHERE "id" = :id"""
         parameters = {"id": element_id}
+
         await self.execute_sql(query=query, parameters=parameters)
 
     async def get_all_user_threads(
@@ -588,7 +612,6 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                 s."generation" AS step_generation,
                 s."showInput" AS step_showinput,
                 s."language" AS step_language,
-                s."indent" AS step_indent,
                 f."value" AS feedback_value,
                 f."comment" AS feedback_comment,
                 f."id" AS feedback_id
@@ -676,9 +699,8 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                         generation=step_feedback.get("step_generation"),
                         showInput=step_feedback.get("step_showinput"),
                         language=step_feedback.get("step_language"),
-                        indent=step_feedback.get("step_indent"),
                         feedback=feedback,
-                    )  # pyright: ignore reportCallIssue
+                    )
                     # Append the step to the steps list of the corresponding ThreadDict
                     thread_dicts[thread_id]["steps"].append(step_dict)
 
@@ -700,9 +722,10 @@ class SQLAlchemyDataLayer(BaseDataLayer):
                         autoPlay=element.get("element_autoPlay"),
                         playerConfig=element.get("element_playerconfig"),
                         page=element.get("element_page"),
+                        props=json.loads(element.get("props", "{}")),
                         forId=element.get("element_forid"),
                         mime=element.get("element_mime"),
-                    )  # pyright: ignore reportCallIssue
+                    )
                     thread_dicts[thread_id]["elements"].append(element_dict)  # type: ignore
 
         return list(thread_dicts.values())
