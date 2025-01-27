@@ -6,6 +6,7 @@ members = [
     "chainlit-azure",
     "chainlit-community",
     "chainlit-dynamodb",
+    "chainlit-literalai",
     "chainlit-s3",
     "chainlit-sqlalchemy",
     "pytest-chainlit",
@@ -449,6 +450,17 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest-chainlit", editable = "packages/pytest" }]
+
+[[package]]
+name = "chainlit-literalai"
+version = "0.1.0"
+source = { editable = "packages/data_layers/literalai" }
+dependencies = [
+    { name = "literalai" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "literalai", specifier = "==0.1.103" }]
 
 [[package]]
 name = "chainlit-s3"

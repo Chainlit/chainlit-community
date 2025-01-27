@@ -1,0 +1,16 @@
+[project]
+name = "chainlit-literalai"
+version = "0.1.0"
+description = "Literal AI data layer for Chainlit."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "literalai==0.1.103",
+]
+
+[tool.uv.sources]
+pytest-chainlit = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
