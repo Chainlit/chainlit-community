@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pytest
 from chainlit import User
-from chainlit.data.sql_alchemy import SQLAlchemyDataLayer
 from chainlit.data.storage_clients.base import BaseStorageClient
 from chainlit.element import Text
+from chainlit_sqlalchemy import SQLAlchemyDataLayer
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import create_async_engine
 
