@@ -30,7 +30,7 @@ from chainlit.user import PersistedUser, User
 
 if TYPE_CHECKING:
     from chainlit.element import Element
-    from types_boto3_dynamodb import DynamoDBClient
+    from mypy_boto3_dynamodb import DynamoDBClient
 
 
 _logger = logger.getChild("DynamoDB")
