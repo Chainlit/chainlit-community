@@ -1,0 +1,20 @@
+[project]
+name = "chainlit-postgres"
+version = "0.1.0"
+description = "Native Postgres backend for Chainlit."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+]
+
+[dependency-groups]
+dev = [
+    "pytest-chainlit",
+]
+
+[tool.uv.sources]
+pytest-chainlit = { workspace = true }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
