@@ -33,7 +33,7 @@ dev = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["packages/**/tests"]
 asyncio_mode = "auto"
 
 [tool.ruff.lint]
