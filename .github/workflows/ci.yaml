@@ -130,3 +130,16 @@ jobs:
 
       - name: Run tests
         run: uv run --all-packages pytest
+
+  ci:
+    runs-on: ubuntu-latest
+    name: CI
+    if: always()  # This ensures the job always runs
+    needs: [lint, test]
+    steps:
+      # Propagate failure
+      - name: Check dependent jobs
+        if: contains(needs.*.result, 'success') != true || contains(needs.*.result, 'skipped')
+        run: |
+          echo "Not all required jobs succeeded"
+          exit 1
