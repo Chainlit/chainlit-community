@@ -28,7 +28,7 @@ if TYPE_CHECKING:
 ISO_FORMAT = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
-class ChainlitDataLayer(BaseDataLayer):
+class PostgresDataLayer(BaseDataLayer):
     def __init__(
         self,
         database_url: str,
