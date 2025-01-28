@@ -13,11 +13,6 @@ repos:
     rev: 0.5.24
     hooks:
       - id: uv-lock
-  # Run pyright
-  - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.392
-    hooks:
-    - id: pyright
   # Format Markdown
   - repo: https://github.com/hukkin/mdformat
     rev: 0.7.21  # Use the ref you want to point at
