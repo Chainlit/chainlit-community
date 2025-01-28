@@ -14,6 +14,7 @@ dependencies = [
 [tool.uv.workspace]
 members = [
     "packages/storage_clients/azure",
+    "packages/storage_clients/azure_blob",
     "packages/storage_clients/s3",
     "packages/data_layers/dynamodb",
     "packages/data_layers/sqlalchemy",
