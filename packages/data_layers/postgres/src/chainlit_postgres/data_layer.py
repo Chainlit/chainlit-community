@@ -1,11 +1,10 @@
 import json
 import uuid
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, List
 
 import aiofiles
 import asyncpg  # type: ignore
-
 from chainlit.data.base import BaseDataLayer
 from chainlit.data.storage_clients.base import BaseStorageClient
 from chainlit.data.utils import queue_until_user_message
@@ -33,11 +32,11 @@ class ChainlitDataLayer(BaseDataLayer):
     def __init__(
         self,
         database_url: str,
-        storage_client: Optional[BaseStorageClient] = None,
+        storage_client: BaseStorageClient | None = None,
         show_logger: bool = False,
     ):
         self.database_url = database_url
-        self.pool: Optional[asyncpg.Pool] = None
+        self.pool: asyncpg.Pool | None = None
         self.storage_client = storage_client
         self.show_logger = show_logger
 
@@ -49,7 +48,7 @@ class ChainlitDataLayer(BaseDataLayer):
         return datetime.now()
 
     async def execute_query(
-        self, query: str, params: Union[Dict, None] = None
+        self, query: str, params: Dict | None = None
     ) -> List[Dict[str, Any]]:
         if not self.pool:
             await self.connect()
@@ -65,7 +64,7 @@ class ChainlitDataLayer(BaseDataLayer):
                 logger.error(f"Database error: {e!s}")
                 raise
 
-    async def get_user(self, identifier: str) -> Optional[PersistedUser]:
+    async def get_user(self, identifier: str) -> PersistedUser | None:
         query = """
         SELECT * FROM "User" 
         WHERE identifier = $1
@@ -82,7 +81,7 @@ class ChainlitDataLayer(BaseDataLayer):
             metadata=json.loads(row.get("metadata", "{}")),
         )
 
-    async def create_user(self, user: User) -> Optional[PersistedUser]:
+    async def create_user(self, user: User) -> PersistedUser | None:
         query = """
         INSERT INTO "User" (id, identifier, metadata, "createdAt", "updatedAt")
         VALUES ($1, $2, $3, $4, $5)
@@ -164,7 +163,7 @@ class ChainlitDataLayer(BaseDataLayer):
                         "end_time": await self.get_current_timestamp(),
                     }
                 )
-        content: Optional[Union[bytes, str]] = None
+        content: bytes | str | None = None
 
         if element.path:
             async with aiofiles.open(element.path, "rb") as f:
@@ -221,9 +220,7 @@ class ChainlitDataLayer(BaseDataLayer):
         }
         await self.execute_query(query, params)
 
-    async def get_element(
-        self, thread_id: str, element_id: str
-    ) -> Optional[ElementDict]:
+    async def get_element(self, thread_id: str, element_id: str) -> ElementDict | None:
         query = """
         SELECT * FROM "Element"
         WHERE id = $1 AND "threadId" = $2
@@ -258,7 +255,7 @@ class ChainlitDataLayer(BaseDataLayer):
         )
 
     @queue_until_user_message()
-    async def delete_element(self, element_id: str, thread_id: Optional[str] = None):
+    async def delete_element(self, element_id: str, thread_id: str | None = None):
         query = """
         SELECT * FROM "Element"
         WHERE id = $1
@@ -467,7 +464,7 @@ class ChainlitDataLayer(BaseDataLayer):
             data=thread_dicts,
         )
 
-    async def get_thread(self, thread_id: str) -> Optional[ThreadDict]:
+    async def get_thread(self, thread_id: str) -> ThreadDict | None:
         query = """
         SELECT t.*, u.identifier as user_identifier
         FROM "Thread" t
@@ -522,10 +519,10 @@ class ChainlitDataLayer(BaseDataLayer):
     async def update_thread(
         self,
         thread_id: str,
-        name: Optional[str] = None,
-        user_id: Optional[str] = None,
-        metadata: Optional[Dict] = None,
-        tags: Optional[List[str]] = None,
+        name: str | None = None,
+        user_id: str | None = None,
+        metadata: Dict | None = None,
+        tags: List[str] | None = None,
     ):
         if self.show_logger:
             logger.info(f"asyncpg: update_thread, thread_id={thread_id}")
@@ -610,5 +607,5 @@ class ChainlitDataLayer(BaseDataLayer):
             await self.pool.close()
 
 
-def truncate(text: Optional[str], max_length: int = 255) -> Optional[str]:
+def truncate(text: str | None, max_length: int = 255) -> str | None:
     return None if text is None else text[:max_length]
