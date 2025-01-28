@@ -5,10 +5,6 @@ Welcome to the Chainlit Community repository! This project extends and enhances 
 [![Discord](https://dcbadge.vercel.app/api/server/ZThrUxbAYw?style=flat)](https://discord.gg/k73SQ3FyUh)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/chainlit_io.svg?style=social&label=Follow%20%40chainlit_io)](https://twitter.com/chainlit_io)
 
-## Getting started
-### Requirements
-* [uv](https://docs.astral.sh/uv/getting-started/installation/)
-
 ## 🌟 About This Project
 
 The Chainlit Community repository is a collaborative space for developers to contribute to the broader Chainlit ecosystem. While the [core Chainlit project](https://github.com/Chainlit/chainlit) focuses on essential features and integrations, this repository serves as a hub for community-maintained extensions, plugins, and integrations.
@@ -22,11 +18,11 @@ The Chainlit Community repository is a collaborative space for developers to con
 ### Roadmap
 
 1. Establish a clear contribution process and guidelines.
-2. Develop and maintain a curated list of community extensions and integrations.
-3. Implement a review and testing system for contributed code.
-4. Create centralized documentation for all sub-projects in the `docs` folder.
-5. Regularly synchronize with the core Chainlit project to ensure compatibility.
-6. Foster a vibrant community of contributors and users.
+1. Develop and maintain a curated list of community extensions and integrations.
+1. Implement a review and testing system for contributed code.
+1. Create centralized documentation for all sub-projects in the `docs` folder.
+1. Regularly synchronize with the core Chainlit project to ensure compatibility.
+1. Foster a vibrant community of contributors and users.
 
 ### Project Goals
 
@@ -49,9 +45,9 @@ The Chainlit Community repository is a collaborative space for developers to con
 We welcome contributions from developers of all skill levels. To get started:
 
 1. Fork this repository and create a new branch for your feature or fix.
-2. Develop your contribution, ensuring it follows our coding standards and guidelines.
-3. Write tests and documentation for your code.
-4. Submit a pull request with a clear description of your changes and their purpose.
+1. Develop your contribution, ensuring it follows our coding standards and guidelines.
+1. Write tests and documentation for your code.
+1. Submit a pull request with a clear description of your changes and their purpose.
 
 For detailed contribution guidelines, please refer to our [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
@@ -110,6 +106,6 @@ This shared repository structure fosters community collaboration, ensures qualit
 
 This project is licensed under the [Apache 2.0 License](LICENSE).
 
----
+______________________________________________________________________
 
 We're excited to see what the community will build with and for Chainlit. Thank you for being a part of this journey!
