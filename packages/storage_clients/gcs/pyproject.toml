@@ -1,0 +1,23 @@
+[project]
+name = "chainlit-gcs"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "google-api-python-client>=2.160.0,<3",
+    "google-cloud-storage>=2.19.0,<3",
+]
+
+[tool.uv.sources]
+pytest-chainlit = { workspace = true }
+
+[dependency-groups]
+dev = [
+    "pytest-chainlit",
+    "pytest-mock>=3.14.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
