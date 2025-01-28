@@ -15,6 +15,35 @@ First off, thank you for considering contributing to the Chainlit Community repo
 
 ## Getting Started
 
+### Requirements
+
+- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+### Setting up
+
+We use uv for package management.
+
+With uv installed, follow these steps to set up your development environment:
+
+1. Install pre-commit hooks: `uv run pre-commit install --install-hooks`
+   This will enable automatic formatting, syntax checking and fixups for your contributions.
+1. Done!
+
+### Adding packages
+
+1. Copy (`cp -r`) the package similar to what you want to create, e.g.:
+   `cp -r packages/data_layers/sqlalchemy packages/data_layers/bananadb`
+1. Rename references to previous data layer in filenames, `pyproject.toml` and `README.md`.
+1. Add the package to `members` in `[tool.uv.workspace]` in the root [`pyproject.toml`](pyproject.toml):
+   ```toml
+   [tool.uv.workspace]
+   members = [
+      ...
+       "packages/data_layers/bananadb",
+       ...
+   ]
+   ```
+
 ### Issues
 
 - Feel free to open issues to report bugs, suggest improvements, or propose new features.
@@ -24,42 +53,10 @@ First off, thank you for considering contributing to the Chainlit Community repo
 ### Pull Requests
 
 1. Fork the repository and create your branch from `main`.
-2. If you've added code that should be tested, add tests.
-3. Ensure your code passes all tests and linting.
-4. Update the documentation, if necessary.
-5. Issue the pull request!
-
-## Development Setup
-
-We use Poetry for package management. Follow these steps to set up your development environment:
-
-1. Install Poetry if you haven't already:
-   ```
-   pip install poetry
-   ```
-
-2. Clone your fork of the repository:
-   ```
-   git clone https://github.com/YOUR_USERNAME/chainlit-community.git
-   cd chainlit-community
-   ```
-
-3. Install the project dependencies:
-   ```
-   poetry install
-   ```
-
-4. Activate the virtual environment:
-   ```
-   poetry shell
-   ```
-
-5. Set up pre-commit hooks:
-   ```
-   pre-commit install
-   ```
-
-Now you're ready to start developing!
+1. If you've added code that should be tested, add tests.
+1. Ensure your code passes all tests and linting.
+1. Update the documentation, if necessary.
+1. Issue the pull request!
 
 ## Coding Standards
 
@@ -72,13 +69,13 @@ Now you're ready to start developing!
 
 We strongly recommend setting up Ruff and Pyright in your text editor or IDE. This will help catch potential issues early in the development process.
 
-## Testing
+## CI/Testing
 
 - Write unit tests for all new code using pytest.
 - Aim for at least 80% test coverage for any new code.
-- Run the full test suite before submitting a pull request:
+- Run the full ci suite locally suite before submitting a pull request:
   ```
-  poetry run pytest
+  ./scripts/ci.sh
   ```
 - Tests should be written to work against both the latest Chainlit release and the main branch.
 
