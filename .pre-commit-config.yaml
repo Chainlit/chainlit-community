@@ -1,0 +1,31 @@
+repos:
+  # Run ruff linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: ruff
+        args: [ --fix ]
+      - id: ruff-format
+  # Make sure your uv.lock file is up to date.
+  # (Even if your pyproject.toml file was changed via pre-commit.)
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.5.24
+    hooks:
+      - id: uv-lock
+  # Run pyright
+  - repo: https://github.com/RobertCraigie/pyright-python
+    rev: v1.1.392
+    hooks:
+    - id: pyright
+  # Format Markdown
+  - repo: https://github.com/hukkin/mdformat
+    rev: 0.7.21  # Use the ref you want to point at
+    hooks:
+    - id: mdformat
+      # Optionally add plugins
+      additional_dependencies:
+      - mdformat-gfm
+      - mdformat-frontmatter
+      - mdformat-footnote
+      - mdformat-gfm-alerts
