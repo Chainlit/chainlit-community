@@ -11,8 +11,8 @@
 UV="uv run --all-packages"
 
 if [ -n "$1" ]; then
-  $UV $1
-  exit 0
+  $UV $@
+  exit $?
 fi
 
 set -ex
