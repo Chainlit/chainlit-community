@@ -4,6 +4,7 @@ requires-python = ">=3.10"
 [manifest]
 members = [
     "chainlit-azure",
+    "chainlit-azure-blob",
     "chainlit-community",
     "chainlit-dynamodb",
     "chainlit-literalai",
@@ -404,6 +405,31 @@ dev = [
 
 [package.metadata]
 requires-dist = [{ name = "azure-storage-file-datalake", specifier = ">=12.14.0,<13" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "azure-identity", specifier = ">=1.14.1,<2" },
+    { name = "pytest-chainlit", editable = "packages/pytest" },
+    { name = "pytest-mock", specifier = ">=3.14.0" },
+]
+
+[[package]]
+name = "chainlit-azure-blob"
+version = "0.1.0"
+source = { editable = "packages/storage_clients/azure_blob" }
+dependencies = [
+    { name = "azure-storage-blob" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "azure-identity" },
+    { name = "pytest-chainlit" },
+    { name = "pytest-mock" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "azure-storage-blob", specifier = ">=12.24.0,<13" }]
 
 [package.metadata.requires-dev]
 dev = [
