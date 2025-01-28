@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         chainlit-version:
-          - "chainlit==2.0.4"
+          - "chainlit"
           - "git+https://github.com/Chainlit/chainlit.git#subdirectory=backend/"
 
         python-version:
