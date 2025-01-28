@@ -1,9 +1,10 @@
 # Chainlit Community
 
-Welcome to the Chainlit Community repository! This project extends and enhances the Chainlit ecosystem through community-driven development and maintenance.
+Welcome to the Chainlit Community repository! This project extends and enhances the [Chainlit](https://chainlit.io/) ecosystem through community-driven development and maintenance.
 
 [![Discord](https://dcbadge.vercel.app/api/server/ZThrUxbAYw?style=flat)](https://discord.gg/k73SQ3FyUh)
 [![Twitter](https://img.shields.io/twitter/url/https/twitter.com/chainlit_io.svg?style=social&label=Follow%20%40chainlit_io)](https://twitter.com/chainlit_io)
+[![CI](https://github.com/Chainlit/chainlit-community/actions/workflows/ci.yaml/badge.svg)](https://github.com/Chainlit/chainlit-community/actions/workflows/ci.yaml)
 
 ## 🌟 About This Project
 
