@@ -62,17 +62,43 @@ To maintain high-quality code and reduce technical debt, we enforce the followin
 - Testing against both the latest Chainlit release and the main branch
 - Documentation for all added or changed functionality
 
-## 🔧 Features and Integrations
+## Component Architecture
 
-This repository hosts a variety of community-maintained features and integrations, including but not limited to:
+Chainlit Community components follow a modular architecture with two main component types:
 
-- Additional LLM framework integrations
-- Custom authentication implementations
-- Specialized UI components
-- Utility functions and helpers
-- Domain-specific extensions
+### 1. Data Layers
+**Role**: Persistent structured data storage for conversation elements (users, threads, steps)  
+**Interactions**:  
+- Direct integration with Chainlit's data layer system  
+- Optional integration with Storage Providers for file attachments  
 
-For a full list of available features and integrations, please check our [Features Directory](FEATURES.md).
+| Package | Description | README |
+|---------|-------------|--------|
+| `dynamodb` | Amazon DynamoDB implementation with cloud storage integration | [docs](packages/data_layers/dynamodb/README.md) |
+| `sqlalchemy` | SQL database support (PostgreSQL/SQLite) with storage provider integration | [docs](packages/data_layers/sqlalchemy/README.md) |
+| `literalai` | Official Literal AI observability platform integration | [docs](packages/data_layers/literalai/README.md) |
+
+### 2. Storage Providers
+**Role**: File storage and management for attachments/media  
+**Interactions**:  
+- Used by Data Layers through dependency injection  
+- Handle upload/delete operations and URL generation  
+
+| Package | Cloud Provider | README |
+|---------|----------------|--------|
+| `azure` | Azure Data Lake | [docs](packages/storage_clients/azure/README.md) |
+| `azure-blob` | Azure Blob Storage | [docs](packages/storage_clients/azure_blob/README.md) |
+| `gcs` | Google Cloud Storage | [docs](packages/storage_clients/gcs/README.md) |
+| `s3` | AWS S3 | [docs](packages/storage_clients/s3/README.md) |
+
+## Typical Data Flow
+```mermaid
+graph LR
+    A[Chainlit App] --> B{Data Layer}
+    B -->|Persists metadata| C[(Database)]
+    B -->|Delegates files| D[[Storage Provider]]
+    D -->|Stores objects| E[(Cloud Storage)]
+```
 
 ## 📚 Documentation
 

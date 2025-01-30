@@ -1,7 +1,7 @@
 [project]
 name = "chainlit-sqlalchemy"
 version = "0.1.0"
-description = "Add your description here"
+description = "SQLAlchemy data layer for Chainlit."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
@@ -10,11 +10,24 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+postgres = [
+    "asyncpg>=0.29.0",
+    "psycopg2-binary>=2.9.9"
+]
+sqlite = [
+    "aiosqlite>=0.20.0"
+]
 azure = [
-  "chainlit-azure",
+    "chainlit-azure",
+]
+azure-blob = [
+    "chainlit-azure-blob",
+]
+gcs = [
+    "chainlit-gcs",
 ]
 s3 = [
-  "chainlit-s3",
+    "chainlit-s3",
 ]
 
 [dependency-groups]
@@ -25,6 +38,8 @@ dev = [
 
 [tool.uv.sources]
 chainlit-azure = { workspace = true }
+chainlit-azure-blob = { workspace = true }
+chainlit-gcs = { workspace = true }
 chainlit-s3 = { workspace = true }
 pytest-chainlit = { workspace = true }
 

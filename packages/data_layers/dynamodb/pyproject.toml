@@ -1,12 +1,26 @@
 [project]
 name = "chainlit-dynamodb"
 version = "0.1.0"
-description = "Add your description here"
+description = "DynamoDB data layer for Chainlit"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "aiohttp>=3.11.10",
     "boto3>=1.34.73,<2",
+]
+
+[project.optional-dependencies]
+s3 = [
+    "chainlit-s3",
+]
+azure-blob = [
+    "chainlit-azure-blob",
+]
+gcs = [
+    "chainlit-gcs",
+]
+azure = [
+    "chainlit-azure",
 ]
 
 [dependency-groups]
@@ -15,6 +29,10 @@ dev = [
 ]
 
 [tool.uv.sources]
+chainlit-s3 = { workspace = true }
+chainlit-azure-blob = { workspace = true }
+chainlit-gcs = { workspace = true }
+chainlit-azure = { workspace = true }
 pytest-chainlit = { workspace = true }
 
 [build-system]
