@@ -19,5 +19,12 @@ dev = [
 pytest-chainlit = { workspace = true }
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-regex-commit"]
 build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "regex_commit"
+path = "src/chainlit_sqlalchemy/__init__.py"
+pattern = '^__version__ = "(.+)"$'
+commit_message = "chore(sqlalchemy): bump version {current_version} → {new_version}"
+tag_name = "sqlalchemy/v{new_version}"
